@@ -16,11 +16,9 @@
     home-manager, 
     ... 
   } @ inputs: let 
-      # inherit (self) outputs; 
-
       systems = [
         "x86_64-linux"
-	"aarch64-darwin"
+	# "aarch64-darwin"
       ]; 
       forAllSystems = nixpkgs.lib.genAttrs systems; 
     in
@@ -58,25 +56,24 @@
       # `nix fmt`
       formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-rfc-style); 
 
-      packages = forAllSystems (
-        system: 
-	let
+      # `USER="xxx" HOME="xxx" home-manager --impure --flake .#default`
+      homeConfigurations = forAllSystems (
+        system:
+        let 
 	  pkgs = nixpkgs.legacyPackages.${system}; 
-	in
+	in 
 	{
-	  neofetch = pkgs.neofetch; 
+	  default = home-manager.lib.homeManagerConfiguration {
+	    inherit pkgs; 
+	    extraSpecialArgs = {
+	      inherit inputs;
+	      pkgs = pkgs; 
+	    }; 
+	    modules = [ ./home.nix ];
+	  }; 
 	}
       ); 
-
-      # `home-manager --flake .#username@hostname`
-      homeConfigurations = {
-        personal = home-manager.lib.homeManagerConfiguration {
-	  pkgs = nixpkgs.legacyPackages.x86_64-linux; 
-	  extraSpecialArgs = {inherit inputs;}; 
-	  modules = [ ./home.nix ];
-	};
-      };
-
+      
     }; 
 }
 
