@@ -47,11 +47,13 @@
             type = "app";
             program = toString (
               pkgs.writeShellScript "update" ''
-                	        set -e 
-                		echo "updating flake..."
-                                nix flake update
-                		echo "updates successfully completed!"
-                	      ''
+                                	        set -e 
+                                		echo "updating flake..."
+                                                nix flake update
+                				echo "updating home-manager..."
+                				nix run nixpkgs#home-manager -- switch --flake .#default --show-trace --impure
+                                		echo "updates successfully completed!"
+                                	      ''
             );
           };
         }
