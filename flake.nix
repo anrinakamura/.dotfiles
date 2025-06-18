@@ -16,7 +16,7 @@
       nixpkgs,
       home-manager,
       ...
-    } @ inputs:
+    }@inputs:
     let
       systems = [
         "x86_64-linux"
@@ -60,11 +60,11 @@
       # `nix fmt`
       formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-rfc-style);
 
-      # `USER="xxx" HOME="xxx" home-manager switch --impure --flake .#default`
-      homeConfigurations = forAllSystems (
-        system:
+      # `USER="xxx" HOME="xxx" home-manager switch --flake .#default --impure`
+      #  or `nix run nixpkgs#home-manager -- switch --flake .#default --impure`
+      homeConfigurations =
         let
-          pkgs = nixpkgs.legacyPackages.${system};
+          pkgs = nixpkgs.legacyPackages.x86_64-linux;
         in
         {
           default = home-manager.lib.homeManagerConfiguration {
@@ -75,8 +75,7 @@
             };
             modules = [ ./home.nix ];
           };
-        }
-      );
+        };
 
     };
 }
