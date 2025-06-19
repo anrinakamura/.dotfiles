@@ -8,6 +8,11 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    treefmt-nix = {
+      url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -15,6 +20,7 @@
       self,
       nixpkgs,
       home-manager,
+      treefmt-nix,
       ...
     }@inputs:
     let
@@ -23,6 +29,14 @@
         # "aarch64-darwin"
       ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
+
+      treefmtEval = forAllSystems (
+        system:
+        let
+          pkgs = nixpkgs.legacyPackages.${system};
+        in
+        treefmt-nix.lib.evalModule pkgs ./treefmt.nix
+      );
     in
     {
       apps = forAllSystems (
@@ -60,7 +74,10 @@
       );
 
       # `nix fmt`
-      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt-rfc-style);
+      formatter = forAllSystems (system: treefmtEval.${system}.config.build.wrapper);
+      checks = forAllSystems (system: {
+        formatting = treefmtEval.${system}.config.build.check self;
+      });
 
       # `USER="xxx" HOME="xxx" home-manager switch --flake .#default --impure`
       #  or `nix run nixpkgs#home-manager -- switch --flake .#default --impure`
