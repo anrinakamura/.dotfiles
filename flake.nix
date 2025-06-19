@@ -75,6 +75,8 @@
 
       # `nix fmt`
       formatter = forAllSystems (system: treefmtEval.${system}.config.build.wrapper);
+
+      # `nix flake checks`
       checks = forAllSystems (system: {
         formatting = treefmtEval.${system}.config.build.check self;
       });
