@@ -26,7 +26,7 @@
     let
       systems = [
         "x86_64-linux"
-        # "aarch64-darwin"
+        "aarch64-darwin"
       ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
 
@@ -83,20 +83,46 @@
 
       # `USER="xxx" HOME="xxx" home-manager switch --flake .#default --impure`
       #  or `nix run nixpkgs#home-manager -- switch --flake .#default --impure`
-      homeConfigurations =
-        let
+      # homeConfigurations = forAllSystems (
+      #   system:
+      #   let
+      #     pkgs = nixpkgs.legacyPackages.${system};
+      #   in
+      #   {
+      #     default = home-manager.lib.homeManagerConfiguration {
+      #       inherit pkgs;
+      #       extraSpecialArgs = {
+      #         inherit inputs;
+      #         pkgs = pkgs;
+      #       };
+      #       modules = [ ./home.nix ];
+      #     };
+      #   }
+      # );
+
+      homeConfigurations = {
+        "default" = home-manager.lib.homeManagerConfiguration {
+          # inherit pkgs;
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
-        in
-        {
-          default = home-manager.lib.homeManagerConfiguration {
-            inherit pkgs;
-            extraSpecialArgs = {
-              inherit inputs;
-              pkgs = pkgs;
-            };
-            modules = [ ./home.nix ];
+
+          extraSpecialArgs = {
+            inherit inputs;
+            # pkgs = pkgs;
           };
+          modules = [ ./home.nix ];
         };
 
+        "darwin" = home-manager.lib.homeManagerConfiguration {
+          # inherit pkgs;
+          pkgs = nixpkgs.legacyPackages.aarch64-darwin;
+
+          extraSpecialArgs = {
+            inherit inputs;
+            # pkgs = pkgs;
+          };
+          modules = [ ./home.nix ];
+        };
+
+      };
     };
 }
