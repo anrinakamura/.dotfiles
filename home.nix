@@ -17,6 +17,8 @@ in
 
   home.packages = with pkgs; [
     neofetch
+    git
+    gh
   ];
 
   programs.home-manager.enable = true;
