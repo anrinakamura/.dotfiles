@@ -13,6 +13,8 @@
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
   };
 
   outputs =
@@ -21,6 +23,7 @@
       nixpkgs,
       home-manager,
       treefmt-nix,
+      neovim-nightly-overlay,
       ...
     }@inputs:
     let

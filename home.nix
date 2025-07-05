@@ -8,6 +8,12 @@ let
   # gitEmail = builtins.getEnv "GIT_EMAIL";
 in
 {
+  nixpkgs = {
+    overlays = [
+      inputs.neovim-nightly-overlay.overlays.default
+    ];
+  };
+
   home = {
     inherit username homeDirectory;
 
@@ -19,6 +25,7 @@ in
     neofetch
     git
     gh
+    neovim
   ];
 
   programs.home-manager.enable = true;
