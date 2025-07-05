@@ -21,12 +21,32 @@ in
     stateVersion = "24.05";
   };
 
+  # home.stableVersion = "24.05";
+  # home.homeDirectory = buildtins.getEnv "HOME";
+  # home.username = builtins.getEnv "USER";
+
   home.packages = with pkgs; [
     neofetch
     git
     gh
     neovim
   ];
+
+  programs.git = {
+    enable = true;
+    extraConfig = {
+      user.name = "anrinakamura";
+      user.email = "89412831+anrinakamura@users.noreply.github.com";
+      init.defaultbranch = "main";
+      core.editor = "vim";
+    };
+  };
+
+  programs.gh.enable = true;
+
+  programs.neovim = {
+    enable = true;
+  };
 
   programs.home-manager.enable = true;
 }
