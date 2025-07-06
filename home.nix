@@ -33,7 +33,7 @@ in
   ];
 
   programs.git = {
-    enable = true;
+    enable = false;
     extraConfig = {
       user.name = "anrinakamura";
       user.email = "89412831+anrinakamura@users.noreply.github.com";
@@ -42,11 +42,13 @@ in
     };
   };
 
-  programs.gh.enable = true;
+  programs.gh.enable = false;
 
   programs.neovim = {
     enable = true;
   };
+
+  xdg.configFile."nvim".source = ./nvim;
 
   programs.home-manager.enable = true;
 }
