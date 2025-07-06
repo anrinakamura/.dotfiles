@@ -48,7 +48,9 @@ in
     enable = true;
   };
 
-  xdg.configFile."nvim".source = ./nvim;
+  # ignore lazy-lock.json
+  xdg.configFile."nvim/init.lua".source = ./nvim/init.lua;
+  xdg.configFile."nvim/lua".source = ./nvim/lua;
 
   programs.home-manager.enable = true;
 }
