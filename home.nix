@@ -1,12 +1,10 @@
-{ inputs, pkgs, ... }:
+# Home-manager cofiguration
 
-let
-  username = builtins.getEnv "USER";
-  homeDirectory = builtins.getEnv "HOME";
-
-  # gitUsername = builtins.getEnv "GIT_USERNAME";
-  # gitEmail = builtins.getEnv "GIT_EMAIL";
-in
+{
+  inputs,
+  pkgs,
+  ...
+}:
 {
   nixpkgs = {
     overlays = [
@@ -14,16 +12,10 @@ in
     ];
   };
 
-  home = {
-    inherit username homeDirectory;
-
-    # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
-    stateVersion = "24.05";
-  };
-
-  # home.stableVersion = "24.05";
-  # home.homeDirectory = buildtins.getEnv "HOME";
-  # home.username = builtins.getEnv "USER";
+  # https://nixos.wiki/wiki/FAQ/When_do_I_update_stateVersion
+  home.stateVersion = "24.05";
+  home.homeDirectory = builtins.getEnv "HOME";
+  home.username = builtins.getEnv "USER";
 
   home.packages = with pkgs; [
     neofetch
@@ -31,10 +23,11 @@ in
     gh
     neovim
     tmux
+    starship
   ];
 
   programs.git = {
-    enable = false;
+    enable = true;
     extraConfig = {
       user.name = "anrinakamura";
       user.email = "89412831+anrinakamura@users.noreply.github.com";
@@ -42,8 +35,6 @@ in
       core.editor = "vim";
     };
   };
-
-  programs.gh.enable = false;
 
   programs.neovim = {
     enable = true;
@@ -57,13 +48,20 @@ in
     enable = true;
     keyMode = "vi";
     terminal = "xterm-256color";
+    mouse = true;
     extraConfig = ''
+      set -g status-right '#(whoami)@#h '
+
       # https://old.reddit.com/r/tmux/comments/mesrci/tmux_2_doesnt_seem_to_use_256_colors/
       set -g default-terminal "xterm-256color"
       set -ga terminal-overrides ",*256col*:Tc"
       set -ga terminal-overrides '*:Ss=\E[%p1%d q:Se=\E[ q'
       set-environment -g COLORTERM "truecolor"
     '';
+  };
+
+  programs.starship = {
+    enable = true;
   };
 
   programs.home-manager.enable = true;
