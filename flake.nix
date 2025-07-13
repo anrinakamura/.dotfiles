@@ -2,18 +2,22 @@
   description = "dotfiles";
 
   inputs = {
+    # Nixpkgs
     nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-unstable";
 
+    # Home manager
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Formatter
     treefmt-nix = {
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Neovim
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
   };
 
@@ -26,6 +30,7 @@
       neovim-nightly-overlay,
       ...
     }@inputs:
+    # Supported systems
     let
       systems = [
         "x86_64-linux"
@@ -33,6 +38,7 @@
       ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
 
+      # Formatter setting
       treefmtEval = forAllSystems (
         system:
         let
@@ -84,44 +90,23 @@
         formatting = treefmtEval.${system}.config.build.check self;
       });
 
-      # `USER="xxx" HOME="xxx" home-manager switch --flake .#default --impure`
-      #  or `nix run nixpkgs#home-manager -- switch --flake .#default --impure`
-      # homeConfigurations = forAllSystems (
-      #   system:
-      #   let
-      #     pkgs = nixpkgs.legacyPackages.${system};
-      #   in
-      #   {
-      #     default = home-manager.lib.homeManagerConfiguration {
-      #       inherit pkgs;
-      #       extraSpecialArgs = {
-      #         inherit inputs;
-      #         pkgs = pkgs;
-      #       };
-      #       modules = [ ./home.nix ];
-      #     };
-      #   }
-      # );
-
+      # `home-manager switch --flake .#<system> --impure`
+      # or `nix run nixpkgs#home-manager -- switch --flake .#<system> --impure`
       homeConfigurations = {
-        "default" = home-manager.lib.homeManagerConfiguration {
-          # inherit pkgs;
+        "linux" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
 
           extraSpecialArgs = {
             inherit inputs;
-            # pkgs = pkgs;
           };
           modules = [ ./home.nix ];
         };
 
         "darwin" = home-manager.lib.homeManagerConfiguration {
-          # inherit pkgs;
           pkgs = nixpkgs.legacyPackages.aarch64-darwin;
 
           extraSpecialArgs = {
             inherit inputs;
-            # pkgs = pkgs;
           };
           modules = [ ./home.nix ];
         };

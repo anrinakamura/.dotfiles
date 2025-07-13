@@ -1,5 +1,5 @@
 -- color scheme
-local current = "catppuccin"
+local current = "tokyonight"
 
 local themes = {
     tokyonight = {
@@ -9,7 +9,7 @@ local themes = {
         config = function()
             require("tokyonight").setup({
                 style = "night",
-                transparent = true,
+                transparent = false,
             }) 
             vim.cmd.colorscheme("tokyonight")
         end, 
@@ -25,17 +25,6 @@ local themes = {
                 transparent_background = false,
             }) 
             vim.cmd.colorscheme("catppuccin")
-        end, 
-    }, 
-    moonfly = {
-        "bluz71/vim-moonfly-colors", 
-        name = "moonfly", 
-        lazy = false, 
-        priority = 1000, 
-        config = function()
-            vim.g.moonflyCursorColor = true
-            vim.g.moonflyTransparent = false
-            vim.cmd.colorscheme("moonfly")
         end, 
     }, 
 }
