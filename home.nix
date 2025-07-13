@@ -1,4 +1,4 @@
-# Home-manager cofiguration
+# Home-manager configuration
 
 {
   inputs,
