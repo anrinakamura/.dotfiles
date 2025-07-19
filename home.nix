@@ -27,6 +27,7 @@
     fzf
     curl
     tree
+    stylua
   ];
 
   programs.git = {
