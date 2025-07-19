@@ -5,8 +5,7 @@ return {
     dependencies = { "nvim-tree/nvim-web-devicons" },
     -- or if using mini.icons/mini.nvim
     -- dependencies = { "echasnovski/mini.icons" },
-    -- opts = {}
-    config  = function() 
+    config = function() 
         local fzf = require("fzf-lua")
         fzf.setup({})
 
@@ -20,3 +19,4 @@ return {
         map('n', '<F1>', fzf.help_tags, opts)             -- help
     end
 }
+
