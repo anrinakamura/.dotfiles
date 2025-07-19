@@ -24,6 +24,9 @@
     neovim
     tmux
     starship
+    fzf
+    curl
+    tree
   ];
 
   programs.git = {
@@ -63,6 +66,8 @@
   programs.starship = {
     enable = true;
   };
+
+  xdg.configFile."starship.toml".source = ./starship.toml;
 
   programs.home-manager.enable = true;
 }

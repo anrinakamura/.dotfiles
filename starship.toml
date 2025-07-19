@@ -1,0 +1,29 @@
+format = """
+$hostname\
+$directory\
+$git_branch
+$character
+"""
+
+add_newline = false
+
+[hostname]
+ssh_only = true
+# ssh_symbol = 'ssh'
+format = '[\(($hostname)\)]($style) '
+style = 'blue'
+
+[directory]
+truncation_length = 5
+truncate_to_repo = false # show full path
+style = 'blue'
+truncation_symbol = '…/'
+
+[git_branch]
+format = '[@ $branch(:$remote_branch)]($style)'
+style = 'yellow'
+
+[character]
+success_symbol = "[\\(*'-'\\)<[ \\$](white)](purple)" # (*'-')< $
+error_symbol = "[\\(*;-;\\)<[ \\$](white)](cyan)" # (*;-;)< $
+
