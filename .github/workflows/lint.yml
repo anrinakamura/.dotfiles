@@ -21,7 +21,7 @@ jobs:
 
   stylua-check: 
     name: Check Lua format with `stylua`
-    runs-on: utunbu-latest
+    runs-on: ubuntu-latest
 
     steps: 
     - name: Checkout repo
